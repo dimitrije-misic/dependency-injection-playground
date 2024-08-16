@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include "interfaces.h"
 
 namespace cisim
@@ -27,14 +28,19 @@ namespace cisim
 			: _turbo(std::move(turbo))
 		{}
 
-		void start()
-		{
-			_running = true;
-		}
-
 		bool running()
 		{
 			return _running;
+		}
+
+		uint32_t speed() const
+		{
+			return _speed;
+		}
+
+		void start()
+		{
+			_running = true;
 		}
 
 		void accelerate()
@@ -49,14 +55,19 @@ namespace cisim
 		int32_t _speed = 0;
 
 	public:
-		void start()
-		{
-			_running = true;
-		}
-
 		bool running()
 		{
 			return _running;
+		}
+
+		uint32_t speed() const
+		{
+			return _speed;
+		}
+
+		void start()
+		{
+			_running = true;
 		}
 
 		void accelerate()
@@ -71,7 +82,7 @@ namespace cisim
 		const uint32_t _max_gear = 8;
 
 	public:
-		void on_start()
+		void start()
 		{
 			_gear = 1;
 		}
@@ -95,7 +106,7 @@ namespace cisim
 		const uint32_t _max_gear = 5;
 
 	public:
-		void on_start()
+		void start()
 		{
 			_gear = 1;
 		}
@@ -121,8 +132,22 @@ namespace cisim
 
 	public:
 		FordMustang(E engine, T transmission)
-			: _engine(std::move(engine))
-			, _transmission(std::move(transmission)
+			: _engine{ std::move(engine) }
+			, _transmission{ std::move(transmission) }
 		{}
+
+		void start()
+		{
+			_engine.start();
+			_transmission.start();
+		}
+
+		void run()
+		{
+			_engine.accelerate();
+
+			if (_transmission.needs_shift(_engine.speed()))
+				_transmission.shift(ShiftDirection::Up);
+		}
 	};
 }

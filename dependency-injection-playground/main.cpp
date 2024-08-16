@@ -1,13 +1,9 @@
-// dependency-injection-playground.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
-#include <iostream>
 #include "implementations.h"
 
 int main()
 {
-    cisim::FordMustang new_mustang{ cisim::V6Turbo{ cisim::Garrett{} }, cisim::Automatic{} };
-    cisim::FordMustang old_mustang{ cisim::V8{}, cisim::Manual{} };
+    using namespace cisim;
 
-    std::cout << "Hello World!\n";
+    IVehicle auto new_mustang = FordMustang{ V6Turbo{ Garrett{} }, Automatic{} };
+    IVehicle auto old_mustang = FordMustang{ V8{}, Manual{} };
 }

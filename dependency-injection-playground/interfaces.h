@@ -19,6 +19,7 @@ namespace cisim
 	concept IEngine = requires (E e)
 	{
 		{ e.running() } -> std::convertible_to<bool>;
+		{ e.speed() } -> std::convertible_to<uint32_t>;
 		{ e.start() };
 		{ e.accelerate() };
 	};
@@ -26,7 +27,7 @@ namespace cisim
 	template <typename T>
 	concept ITransmission = requires (T t, uint32_t speed, ShiftDirection direction)
 	{
-		{ t.on_start() };
+		{ t.start() };
 		{ t.needs_shift(speed) } -> std::convertible_to<bool>;
 		{ t.shift(direction) };
 	};
@@ -34,7 +35,7 @@ namespace cisim
 	template <typename T>
 	concept IVehicle = requires (T t)
 	{
-		IEngine<decltype(t.engine)>;
-		ITransmission<decltype(t.transmission)>;
+		{ t.start() };
+		{ t.run() };
 	};
 }
